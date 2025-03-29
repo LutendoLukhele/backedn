@@ -1,0 +1,248 @@
+{
+  "tools": [
+    {
+      "name": "fetch_emails",
+      "description": "Fetch Gmail emails",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["fetch"],
+                "prompt": "What email operation should I perform?",
+                "hint": "Only 'fetch' is available"
+              },
+              "maxResults": {
+                "type": "integer",
+                "optional": true,
+                "prompt": "How many emails should I fetch?",
+                "hint": "e.g., 10 (default: 20)"
+              },
+              "query": {
+                "type": "string",
+                "optional": true,
+                "prompt": "Any specific search criteria?",
+                "hint": "e.g., from:john@doe.com, subject:urgent"
+              }
+            },
+            "required": ["operation"]
+          }
+        },
+        "required": ["input"]
+      }
+    },
+    {
+      "name": "send_email",
+      "description": "Send email via Gmail",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["send"],
+                "prompt": "What email operation should I perform?",
+                "hint": "Only 'send' is available"
+              },
+              "to": {
+                "type": "string",
+                "prompt": "Who should receive this email?",
+                "hint": "e.g., recipient@company.com"
+              },
+              "subject": {
+                "type": "string",
+                "prompt": "What's the subject line?",
+                "hint": "e.g., Meeting Reschedule"
+              },
+              "body": {
+                "type": "string",
+                "prompt": "What should the email say?",
+                "hint": "Keep it concise and clear"
+              }
+            },
+            "required": ["operation", "to", "subject", "body"]
+          }
+        },
+        "required": ["input"]
+      }
+    },
+    {
+      "name": "fetch_entity",
+      "description": "Fetch Salesforce records",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["fetch"],
+                "prompt": "What Salesforce operation should I perform?",
+                "hint": "Only 'fetch' is available"
+              },
+              "entityType": {
+                "type": "string",
+                "enum": ["Account", "Contact", "Lead", "Deal", "Article", "Case"],
+                "prompt": "Which entity type are you looking for?",
+                "hint": "Choose from: Account, Contact, Lead, Deal, Article, Case"
+              },
+              "identifier": {
+                "type": "string",
+                "prompt": "Provide the lookup key for the Salesforce record. Use the appropriate field based on the entity type—for example, for Account and Deal use 'name', for Contact and Lead use 'email', for Article use 'title', and for Case use 'caseNumber'.",
+                "hint": "e.g., if entityType is 'Deal', provide the deal name instead of an ID"
+              }
+            },
+            "required": ["operation", "entityType", "identifier"]
+          }
+        },
+        "required": ["input"]
+      }
+    },
+    {
+      "name": "create_entity",
+      "description": "Create Salesforce entity",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["create"],
+                "prompt": "What Salesforce operation should I perform?",
+                "hint": "Only 'create' is available"
+              },
+              "entityType": {
+                "type": "string",
+                "enum": ["Account", "Contact", "Lead", "Deal", "Article", "Case"],
+                "prompt": "Which entity type are you creating?",
+                "hint": "Choose from: Account, Contact, Lead, Deal, Article, Case"
+              },
+              "fields": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "prompt": "What's the name of the new {entityType}?",
+                    "hint": "e.g., Acme Corp"
+                  },
+                  "industry": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "What industry does this {entityType} belong to?",
+                    "hint": "e.g., Technology, Healthcare"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "What's the phone number?",
+                    "hint": "e.g., +1-555-123-4567"
+                  },
+                  "website": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "What's the website URL?",
+                    "hint": "e.g., https://company.com"
+                  }
+                },
+                "required": ["name"]
+              }
+            },
+            "required": ["operation", "entityType", "fields"]
+          }
+        },
+        "required": ["input"]
+      }
+    },
+    {
+      "name": "update_entity",
+      "description": "Update Salesforce entity",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["update"],
+                "prompt": "What Salesforce operation should I perform?",
+                "hint": "Only 'update' is available"
+              },
+              "entityType": {
+                "type": "string",
+                "enum": ["Account", "Contact", "Lead", "Deal", "Article", "Case"],
+                "prompt": "Which entity type are you updating?",
+                "hint": "Choose from: Account, Contact, Lead, Deal, Article, Case"
+              },
+              "identifier": {
+                "type": "string",
+                "prompt": "Provide the lookup key for the Salesforce record to update. Use the appropriate field based on the entity type—for instance, for Account and Deal use 'name', for Contact and Lead use 'email', for Article use 'title', and for Case use 'caseNumber'.",
+                "hint": "e.g., if entityType is 'Lead', provide the lead's email address instead of an ID"
+              },
+              "fields": {
+                "type": "object",
+                "minProperties": 1,
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "New name for the {entityType}?",
+                    "hint": "e.g., Updated Corp Name"
+                  },
+                  "industry": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "New industry for the {entityType}?",
+                    "hint": "e.g., Manufacturing"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "New phone number?",
+                    "hint": "e.g., +1-555-765-4321"
+                  },
+                  "website": {
+                    "type": "string",
+                    "optional": true,
+                    "prompt": "New website URL?",
+                    "hint": "e.g., https://new-website.com"
+                  }
+                }
+              }
+            },
+            "required": ["operation", "entityType", "identifier", "fields"]
+          }
+        },
+        "required": ["input"]
+      }
+    }
+  ],
+  "providers": {
+    "google-mail": {
+      "endpoint": "gmail",
+      "provider_config_key": "google-mail",
+      "connection_id": "e5bce133-e6df-4cb7-9fb1-ec1d48023079",
+      "objects": ["Message"]
+    },
+    "google-calendar": {
+      "endpoint": "calendar",
+      "provider_config_key": "google-calendar",
+      "connection_id": "30009351-89b2-4546-9367-bce987d6d79d",
+      "objects": ["Calendar", "Event"]
+    },
+    "salesforce": {
+      "endpoint": "salesforce",
+      "provider_config_key": "salesforce-2",
+      "connection_id": "2afdea8f-9c5a-4555-9e88-6c440e59c037",
+      "objects": ["Account", "Contact", "Lead", "Deal", "Article", "Case"]
+    }
+  }
+}
